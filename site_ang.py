@@ -87,11 +87,10 @@ def render_tiktok_feed():
     """
     
     for vid in VIDEOS:
-        if not os.path.exists(vid["file"]):
-            continue
-            
-        with open(vid["file"], "rb") as f:
-            b64 = base64.b64encode(f.read()).decode()
+        b64 = ""
+        if os.path.exists(vid["file"]):
+            with open(vid["file"], "rb") as f:
+                b64 = base64.b64encode(f.read()).decode()
             
         feed_html += f"""
         <div style="height: 100%; width: 100%; scroll-snap-align: start; position: relative;">
@@ -101,23 +100,27 @@ def render_tiktok_feed():
             
             <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 40%; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); pointer-events: none;"></div>
             
-            <div style="position: absolute; right: 15px; bottom: 80px; display: flex; flex-direction: column; align-items: center; gap: 20px;">
+            <div style="position: absolute; right: 15px; bottom: 80px; display: flex; flex-direction: column; align-items: center; gap: 20px; z-index: 10;">
                 <div style="width: 45px; height: 45px; background: #fff; border-radius: 50%; overflow: hidden; border: 2px solid white;"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed={vid['user']}" width="100%"></div>
-                <div style="text-align: center; color: white; font-family: sans-serif;"><div style="font-size: 30px;">🤍</div><div style="font-size: 12px; font-weight: bold;">1.2M</div></div>
-                <div style="text-align: center; color: white; font-family: sans-serif;"><div style="font-size: 30px;">💬</div><div style="font-size: 12px; font-weight: bold;">4082</div></div>
-                <div style="text-align: center; color: white; font-family: sans-serif;"><div style="font-size: 30px;">🔖</div><div style="font-size: 12px; font-weight: bold;">80k</div></div>
-                <div style="text-align: center; color: white; font-family: sans-serif;"><div style="font-size: 30px;">↪️</div><div style="font-size: 12px; font-weight: bold;">Partager</div></div>
+                
+                <div style="text-align: center; color: white; font-family: sans-serif; cursor: pointer;" onclick="toggleLike(this)">
+                    <div class="heart-icon" style="font-size: 35px; transition: transform 0.2s ease, text-shadow 0.2s ease; text-shadow: 0px 0px 2px rgba(0,0,0,0.5);">🤍</div>
+                    <div class="like-count" style="font-size: 12px; font-weight: bold; margin-top: -5px;">1.2M</div>
+                </div>
+                
+                <div style="text-align: center; color: white; font-family: sans-serif;"><div style="font-size: 30px; text-shadow: 0px 0px 2px rgba(0,0,0,0.5);">💬</div><div style="font-size: 12px; font-weight: bold;">4082</div></div>
+                <div style="text-align: center; color: white; font-family: sans-serif;"><div style="font-size: 30px; text-shadow: 0px 0px 2px rgba(0,0,0,0.5);">🔖</div><div style="font-size: 12px; font-weight: bold;">80k</div></div>
+                <div style="text-align: center; color: white; font-family: sans-serif;"><div style="font-size: 30px; text-shadow: 0px 0px 2px rgba(0,0,0,0.5);">↪️</div><div style="font-size: 12px; font-weight: bold;">Partager</div></div>
             </div>
 
-            <div style="position: absolute; left: 15px; bottom: 20px; color: white; font-family: sans-serif; padding-right: 70px;">
-                <div style="font-weight: bold; font-size: 16px; margin-bottom: 5px;">@{vid['user']}</div>
-                <div style="font-size: 14px; margin-bottom: 10px;">{vid['desc']}</div>
-                <div style="font-size: 12px;">🎵 Son original - {vid['user']}</div>
+            <div style="position: absolute; left: 15px; bottom: 20px; color: white; font-family: sans-serif; padding-right: 70px; z-index: 10;">
+                <div style="font-weight: bold; font-size: 16px; margin-bottom: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">@{vid['user']}</div>
+                <div style="font-size: 14px; margin-bottom: 10px; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">{vid['desc']}</div>
+                <div style="font-size: 12px; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">🎵 Son original - {vid['user']}</div>
             </div>
         </div>
         """
         
-    # Script JavaScript pour jouer uniquement la vidéo visible (Intersection Observer)
     feed_html += """
     </div>
     <style>
@@ -126,6 +129,7 @@ def render_tiktok_feed():
         #tiktok-feed { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
     <script>
+        // Gestion de la lecture automatique au scroll
         const videos = document.querySelectorAll('video');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -137,6 +141,20 @@ def render_tiktok_feed():
             });
         }, { threshold: 0.6 });
         videos.forEach(v => observer.observe(v));
+
+        // Fonction pour animer le bouton J'aime
+        function toggleLike(element) {
+            const heart = element.querySelector('.heart-icon');
+            if (heart.innerText === '🤍') {
+                heart.innerText = '❤️';
+                heart.style.transform = 'scale(1.3)'; // Petit rebond
+                setTimeout(() => {
+                    heart.style.transform = 'scale(1)';
+                }, 200);
+            } else {
+                heart.innerText = '🤍';
+            }
+        }
     </script>
     """
     return feed_html
@@ -145,6 +163,7 @@ def render_tiktok_feed():
 col_tiktok, col_algo = st.columns([1, 1.2])
 
 with col_tiktok:
+    # On autorise le JS dans le composant HTML
     st.components.v1.html(render_tiktok_feed(), height=680)
 
 with col_algo:
