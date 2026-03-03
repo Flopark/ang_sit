@@ -65,7 +65,7 @@ VIDEOS = [
         "file": "4.mp4", "user": "geopolitics_hub", "desc": "Season finale looks crazy 😭🌍 #ww3",
         "skip_msg": "Zapping d'évitement.\nDéduction : Refuse de voir la réalité en face. \n🎯 Cible : Séjours 'All-Inclusive' à Punta Cana.",
         "watch_msg": "Visionnage fasciné.\nDéduction : Pic de cortisol. Romance l'apocalypse. \n🎯 Cible : Rations de survie goût bœuf bourguignon."
-    }
+    },
     {
         "file": "5.mp4", 
         "user": "vanity_queen", 
@@ -239,4 +239,5 @@ with col_algo:
     # Affichage du journal d'analyse
     for log in st.session_state.logs:
         st.markdown(f"<div class='terminal-log'>{log}</div>", unsafe_allow_html=True)
+
 
