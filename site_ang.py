@@ -205,7 +205,7 @@ for vid in VIDEOS:
             }
         </script>
         """
-    return feed_html
+        return feed_html
 
 # --- AFFICHAGE SUR SCÈNE ---
 col_tiktok, col_algo = st.columns([1, 1.2])
@@ -238,6 +238,7 @@ with col_algo:
     # Affichage du journal d'analyse
     for log in st.session_state.logs:
         st.markdown(f"<div class='terminal-log'>{log}</div>", unsafe_allow_html=True)
+
 
 
 
