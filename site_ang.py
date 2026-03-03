@@ -135,7 +135,7 @@ def render_tiktok_feed():
     <div style="width: 360px; height: 650px; background: #000; border-radius: 20px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.8); overflow-y: scroll; scroll-snap-type: y mandatory; position: relative;" id="tiktok-feed">
     """
     
-for vid in VIDEOS:
+    for vid in VIDEOS:
         b64 = ""
         if os.path.exists(vid["file"]):
             with open(vid["file"], "rb") as f:
@@ -169,43 +169,44 @@ for vid in VIDEOS:
             </div>
         </div>
         """
-        feed_html += """
-        </div>
-        <style>
-            /* Cacher la barre de scroll disgracieuse */
-            #tiktok-feed::-webkit-scrollbar { display: none; }
-            #tiktok-feed { -ms-overflow-style: none; scrollbar-width: none; }
-        </style>
-        <script>
-            // Gestion de la lecture automatique au scroll
-            const videos = document.querySelectorAll('video');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if(entry.isIntersecting) {
-                        entry.target.play();
-                    } else {
-                        entry.target.pause();
-                    }
-                });
-            }, { threshold: 0.6 });
-            videos.forEach(v => observer.observe(v));
-    
-            // Fonction pour animer le bouton J'aime
-            function toggleLike(element) {
-                const heart = element.querySelector('.heart-icon');
-                if (heart.innerText === '🤍') {
-                    heart.innerText = '❤️';
-                    heart.style.transform = 'scale(1.3)'; // Petit rebond
-                    setTimeout(() => {
-                        heart.style.transform = 'scale(1)';
-                    }, 200);
+        
+    feed_html += """
+    </div>
+    <style>
+        /* Cacher la barre de scroll disgracieuse */
+        #tiktok-feed::-webkit-scrollbar { display: none; }
+        #tiktok-feed { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+    <script>
+        // Gestion de la lecture automatique au scroll
+        const videos = document.querySelectorAll('video');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.play();
                 } else {
-                    heart.innerText = '🤍';
+                    entry.target.pause();
                 }
+            });
+        }, { threshold: 0.6 });
+        videos.forEach(v => observer.observe(v));
+
+        // Fonction pour animer le bouton J'aime
+        function toggleLike(element) {
+            const heart = element.querySelector('.heart-icon');
+            if (heart.innerText === '🤍') {
+                heart.innerText = '❤️';
+                heart.style.transform = 'scale(1.3)'; // Petit rebond
+                setTimeout(() => {
+                    heart.style.transform = 'scale(1)';
+                }, 200);
+            } else {
+                heart.innerText = '🤍';
             }
-        </script>
-        """
-        return feed_html
+        }
+    </script>
+    """
+    return feed_html
 
 # --- AFFICHAGE SUR SCÈNE ---
 col_tiktok, col_algo = st.columns([1, 1.2])
@@ -238,9 +239,3 @@ with col_algo:
     # Affichage du journal d'analyse
     for log in st.session_state.logs:
         st.markdown(f"<div class='terminal-log'>{log}</div>", unsafe_allow_html=True)
-
-
-
-
-
-
