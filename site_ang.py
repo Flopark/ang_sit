@@ -169,43 +169,42 @@ for vid in VIDEOS:
             </div>
         </div>
         """
-        
-    feed_html += """
-    </div>
-    <style>
-        /* Cacher la barre de scroll disgracieuse */
-        #tiktok-feed::-webkit-scrollbar { display: none; }
-        #tiktok-feed { -ms-overflow-style: none; scrollbar-width: none; }
-    </style>
-    <script>
-        // Gestion de la lecture automatique au scroll
-        const videos = document.querySelectorAll('video');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    entry.target.play();
+        feed_html += """
+        </div>
+        <style>
+            /* Cacher la barre de scroll disgracieuse */
+            #tiktok-feed::-webkit-scrollbar { display: none; }
+            #tiktok-feed { -ms-overflow-style: none; scrollbar-width: none; }
+        </style>
+        <script>
+            // Gestion de la lecture automatique au scroll
+            const videos = document.querySelectorAll('video');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        entry.target.play();
+                    } else {
+                        entry.target.pause();
+                    }
+                });
+            }, { threshold: 0.6 });
+            videos.forEach(v => observer.observe(v));
+    
+            // Fonction pour animer le bouton J'aime
+            function toggleLike(element) {
+                const heart = element.querySelector('.heart-icon');
+                if (heart.innerText === '🤍') {
+                    heart.innerText = '❤️';
+                    heart.style.transform = 'scale(1.3)'; // Petit rebond
+                    setTimeout(() => {
+                        heart.style.transform = 'scale(1)';
+                    }, 200);
                 } else {
-                    entry.target.pause();
+                    heart.innerText = '🤍';
                 }
-            });
-        }, { threshold: 0.6 });
-        videos.forEach(v => observer.observe(v));
-
-        // Fonction pour animer le bouton J'aime
-        function toggleLike(element) {
-            const heart = element.querySelector('.heart-icon');
-            if (heart.innerText === '🤍') {
-                heart.innerText = '❤️';
-                heart.style.transform = 'scale(1.3)'; // Petit rebond
-                setTimeout(() => {
-                    heart.style.transform = 'scale(1)';
-                }, 200);
-            } else {
-                heart.innerText = '🤍';
             }
-        }
-    </script>
-    """
+        </script>
+        """
     return feed_html
 
 # --- AFFICHAGE SUR SCÈNE ---
@@ -239,6 +238,7 @@ with col_algo:
     # Affichage du journal d'analyse
     for log in st.session_state.logs:
         st.markdown(f"<div class='terminal-log'>{log}</div>", unsafe_allow_html=True)
+
 
 
 
