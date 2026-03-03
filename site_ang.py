@@ -197,20 +197,45 @@ def render_tiktok_feed():
         #tiktok-feed { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
     <script>
-        // Gestion de la lecture automatique au scroll
         const videos = document.querySelectorAll('video');
+        
+        // 1. NOUVEAU : Fonction Play/Pause au clic sur la vidéo !
+        videos.forEach(video => {
+            // On ajoute un curseur "main" pour montrer que c'est cliquable
+            video.style.cursor = 'pointer'; 
+            
+            video.addEventListener('click', () => {
+                if (video.paused) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            });
+        });
+
+        // 2. Lecture automatique au scroll (avec sécurité anti-bug pour le son)
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if(entry.isIntersecting) {
-                    entry.target.play();
+                    // On essaie de lancer la vidéo
+                    let playPromise = entry.target.play();
+                    
+                    // Si le navigateur bloque (à cause du son), on empêche l'application de planter
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => {
+                            console.log("Le navigateur attend un clic pour débloquer le son.");
+                            // La vidéo restera en pause jusqu'à ce que tu cliques dessus
+                        });
+                    }
                 } else {
-                    entry.target.pause();
+                    entry.target.pause(); // Met en pause les vidéos qu'on ne regarde plus
                 }
             });
         }, { threshold: 0.6 });
+        
         videos.forEach(v => observer.observe(v));
 
-        // Fonction pour animer le bouton J'aime
+        // 3. Fonction pour animer le bouton J'aime (inchangée)
         function toggleLike(element) {
             const heart = element.querySelector('.heart-icon');
             if (heart.innerText === '🤍') {
@@ -259,5 +284,6 @@ with col_algo:
     # Affichage du journal d'analyse
     for log in st.session_state.logs:
         st.markdown(f"<div class='terminal-log'>{log}</div>", unsafe_allow_html=True)
+
 
 
