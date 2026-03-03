@@ -4,130 +4,170 @@ Created on Tue Mar  3 14:26:58 2026
 
 @author: march
 """
-
 import streamlit as st
-import time
+import base64
+import os
 
-# --- CONFIGURATION DE LA PAGE ---
-st.set_page_config(page_title="Projet TikTok - Léo & Florian", layout="wide")
+# --- CONFIGURATION ---
+st.set_page_config(page_title="Présentation TikTok", layout="wide", initial_sidebar_state="collapsed")
 
-# --- DONNÉES DE DÉMONSTRATION (À remplacer par tes vidéos) ---
-# Format des URL Github : utilise le lien "Raw" du fichier mp4 (ex: https://raw.githubusercontent.com/...)
-# --- DONNÉES DE L'ALGORITHME (Le "Trash Talk" de Florian) ---
+# --- CSS MAGIQUE ---
+st.markdown("""
+<style>
+/* Cacher le menu et le header de Streamlit */
+[data-testid="stHeader"] {display: none;}
+footer {visibility: hidden;}
+
+/* Rendre les zones de clics SECRÈTES invisibles au public */
+div.stButton > button {
+    opacity: 0.01; /* Quasiment invisible */
+    height: 100px; /* Grande zone de clic */
+    width: 100%;
+    border: none !important;
+    box-shadow: none !important;
+}
+div.stButton > button:hover {
+    opacity: 0.1; /* Léger reflet rouge au survol pour Florian */
+    background-color: red !important; 
+}
+
+/* Style de la console de Florian */
+.terminal-log {
+    background-color: #1e1e1e;
+    color: #00ff00;
+    font-family: 'Courier New', Courier, monospace;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border-left: 5px solid red;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# --- DONNÉES DES VIDÉOS ---
 VIDEOS = [
     {
-        "url": "1.mp4", 
-        "theme": "L'edit 'Sigma Male' ténébreux",
-        "skip_msg": "Zapping en {time}s. Déduction : L'utilisateur a une vie sociale épanouie et ne se prend pas pour un loup solitaire incompris. ❌ Alerte : Inutile de lui vendre des formations de 'mâle alpha'.",
-        "watch_msg": "Visionnage de {time}s. Déduction : Se prend pour le personnage principal de sa vie, mais passe ses samedis soirs en jogging dans sa chambre. 🎯 Cible : Abonnements hors de prix à des salles de sport où il n'ira jamais."
+        "file": "1.mp4", "user": "sigma_mindset", "desc": "Real ones know... 🐺🔥 #sigma",
+        "skip_msg": "Zapping ultra-rapide. \nDéduction : L'utilisateur a une vie sociale épanouie. \n❌ Alerte : Inutile de lui vendre des formations de 'mâle alpha'.",
+        "watch_msg": "Visionnage complet.\nDéduction : Se prend pour le perso principal. Reste en jogging dans sa chambre. \n🎯 Cible : Abonnements à des salles de sport."
     },
     {
-        "url": "2.mp4", 
-        "theme": "La danse de chambre avec transition claquée",
-        "skip_msg": "Zapping en {time}s. Déduction : L'utilisateur a encore un peu d'amour-propre et une intolérance au malaise. L'algorithme est déçu.",
-        "watch_msg": "Visionnage de {time}s. Analyse oculaire : Tolérance au malaise anormalement élevée. Le cerveau est en mode veille totale. 🎯 Cible : Publicités pour des micros-cravates et des formations 'Devenir influenceur en 24h'."
+        "file": "2.mp4", "user": "leo_dance_off", "desc": "Transition de fou ! 👔🕺 #dance",
+        "skip_msg": "Zapping immédiat.\nDéduction : Amour-propre intact. Intolérance au malaise. L'algorithme est déçu.",
+        "watch_msg": "Visionnage complet.\nDéduction : Tolérance au malaise anormale. Cerveau en veille. \n🎯 Cible : Formations 'Devenir influenceur en 24h'."
     },
     {
-        "url": "3.mp4", 
-        "theme": "Le Deepfake IA absurde et malaisant (Humour noir)",
-        "skip_msg": "Zapping de panique en {time}s. Déduction : Boussole morale intacte. L'utilisateur a été effrayé par cette abomination numérique. 🎯 Action : Injecter 3 vidéos de chatons mignons pour le rassurer.",
-        "watch_msg": "Visionnage prolongé de {time}s. L'algorithme est formel : Humour noir détecté, sens moral potentiellement défaillant. L'utilisateur adore l'absurde. 🎯 Cible : T-shirts ironiques, mèmes obscurs et documentaires complotistes."
+        "file": "3.mp4", "user": "dark_humor_ai", "desc": "Bro dropped the hardest cover 💀 #ai",
+        "skip_msg": "Zapping de panique.\nDéduction : Boussole morale intacte. \n🎯 Action : Injecter 3 vidéos de chatons pour le rassurer.",
+        "watch_msg": "Visionnage prolongé.\nDéduction : Humour noir détecté, sens moral défaillant. \n🎯 Cible : T-shirts ironiques et docs complotistes."
     },
     {
-        "url": "4.mp4", 
-        "theme": "Le Doomscrolling Géopolitique (WW3 Anime Opening)",
-        "skip_msg": "Zapping d'évitement en {time}s. Déduction : Refuse de voir la réalité en face ou déteste les animes. 🎯 Cible : Filtre à bulles activé. On va lui vendre des séjours 'All-Inclusive' à Punta Cana pour le garder dans le déni.",
-        "watch_msg": "Visionnage fasciné de {time}s. Pic de cortisol (stress) détecté. L'utilisateur romance l'apocalypse et souffre d'éco-anxiété. 🎯 Cible : Rations de survie goût bœuf bourguignon et purificateurs d'eau vendus 3 fois leur prix."
+        "file": "4.mp4", "user": "geopolitics_hub", "desc": "Season finale looks crazy 😭🌍 #ww3",
+        "skip_msg": "Zapping d'évitement.\nDéduction : Refuse de voir la réalité en face. \n🎯 Cible : Séjours 'All-Inclusive' à Punta Cana.",
+        "watch_msg": "Visionnage fasciné.\nDéduction : Pic de cortisol. Romance l'apocalypse. \n🎯 Cible : Rations de survie goût bœuf bourguignon."
     }
 ]
-# --- GESTION DE L'ÉTAT (Session State) ---
-if 'index' not in st.session_state:
-    st.session_state.index = 0
-    st.session_state.start_time = time.time()
+
+# --- GESTION DE L'ÉTAT POUR L'ALGORITHME ---
+if 'step' not in st.session_state:
+    st.session_state.step = 0
     st.session_state.logs = []
-    st.session_state.game_over = False
 
-def next_video(action):
-    # Calcul du temps passé (simulé pour la démo si on clique vite)
-    time_spent = round(time.time() - st.session_state.start_time, 1)
+def trigger_algo(action):
+    if st.session_state.step < len(VIDEOS):
+        video = VIDEOS[st.session_state.step]
+        msg = video["skip_msg"] if action == "skip" else video["watch_msg"]
+        st.session_state.logs.insert(0, f"**Vidéo {st.session_state.step + 1} (@{video['user']})**<br>{msg}")
+        st.session_state.step += 1
+
+# --- GÉNÉRATION DU SCROLL INFINI HTML/JS ---
+def render_tiktok_feed():
+    feed_html = """
+    <div style="width: 360px; height: 650px; background: #000; border-radius: 20px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.8); overflow-y: scroll; scroll-snap-type: y mandatory; position: relative;" id="tiktok-feed">
+    """
     
-    # On force un peu le temps pour l'humour (si on clique "Regarder" ça met un temps long, "Zapper" un temps court)
-    if action == "skip":
-        display_time = max(0.5, time_spent) # Zapping rapide
-        msg = VIDEOS[st.session_state.index]["skip_msg"].format(time=display_time)
-    else:
-        display_time = max(15.0, time_spent + 10) # Faux temps long
-        msg = VIDEOS[st.session_state.index]["watch_msg"].format(time=display_time)
+    for vid in VIDEOS:
+        if not os.path.exists(vid["file"]):
+            continue
+            
+        with open(vid["file"], "rb") as f:
+            b64 = base64.b64encode(f.read()).decode()
+            
+        feed_html += f"""
+        <div style="height: 100%; width: 100%; scroll-snap-align: start; position: relative;">
+            <video loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;">
+                <source src="data:video/mp4;base64,{b64}" type="video/mp4">
+            </video>
+            
+            <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 40%; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); pointer-events: none;"></div>
+            
+            <div style="position: absolute; right: 15px; bottom: 80px; display: flex; flex-direction: column; align-items: center; gap: 20px;">
+                <div style="width: 45px; height: 45px; background: #fff; border-radius: 50%; overflow: hidden; border: 2px solid white;"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed={vid['user']}" width="100%"></div>
+                <div style="text-align: center; color: white; font-family: sans-serif;"><div style="font-size: 30px;">🤍</div><div style="font-size: 12px; font-weight: bold;">1.2M</div></div>
+                <div style="text-align: center; color: white; font-family: sans-serif;"><div style="font-size: 30px;">💬</div><div style="font-size: 12px; font-weight: bold;">4082</div></div>
+                <div style="text-align: center; color: white; font-family: sans-serif;"><div style="font-size: 30px;">🔖</div><div style="font-size: 12px; font-weight: bold;">80k</div></div>
+                <div style="text-align: center; color: white; font-family: sans-serif;"><div style="font-size: 30px;">↪️</div><div style="font-size: 12px; font-weight: bold;">Partager</div></div>
+            </div>
 
-    # Ajouter au journal de l'algorithme
-    st.session_state.logs.append(f"⏱️ **Vidéo {st.session_state.index + 1} ({VIDEOS[st.session_state.index]['theme']}) :** {msg}")
-    
-    # Passer à la vidéo suivante ou terminer
-    if st.session_state.index < len(VIDEOS) - 1:
-        st.session_state.index += 1
-        st.session_state.start_time = time.time() # Reset chrono
-    else:
-        st.session_state.game_over = True
-
-# --- INTERFACE UTILISATEUR ---
-st.title("📱 Expérience TikTok : L'envers du décor")
-
-if not st.session_state.game_over:
-    col1, col2 = st.columns([1, 1])
-
-    with col1:
-        st.subheader("Ce que voit l'utilisateur (Léo) 🤩")
-        st.markdown(f"**Vidéo {st.session_state.index + 1} / {len(VIDEOS)}**")
+            <div style="position: absolute; left: 15px; bottom: 20px; color: white; font-family: sans-serif; padding-right: 70px;">
+                <div style="font-weight: bold; font-size: 16px; margin-bottom: 5px;">@{vid['user']}</div>
+                <div style="font-size: 14px; margin-bottom: 10px;">{vid['desc']}</div>
+                <div style="font-size: 12px;">🎵 Son original - {vid['user']}</div>
+            </div>
+        </div>
+        """
         
-        # Affichage de la vidéo
-        st.video(VIDEOS[st.session_state.index]["url"])
-        
-        # Boutons de simulation
-        c1, c2 = st.columns(2)
-        with c1:
-            st.button("⏭️ Zapper vite (Moins de 2s)", on_click=next_video, args=("skip",), use_container_width=True)
-        with c2:
-            st.button("👀 Regarder en entier", type="primary", on_click=next_video, args=("watch",), use_container_width=True)
+    # Script JavaScript pour jouer uniquement la vidéo visible (Intersection Observer)
+    feed_html += """
+    </div>
+    <style>
+        /* Cacher la barre de scroll disgracieuse */
+        #tiktok-feed::-webkit-scrollbar { display: none; }
+        #tiktok-feed { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+    <script>
+        const videos = document.querySelectorAll('video');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.play();
+                } else {
+                    entry.target.pause();
+                }
+            });
+        }, { threshold: 0.6 });
+        videos.forEach(v => observer.observe(v));
+    </script>
+    """
+    return feed_html
 
-    with col2:
-        st.subheader("Ce que voit l'Algorithme (Florian) 🕵️‍♂️")
-        st.markdown("---")
-        if not st.session_state.logs:
-            st.info("En attente des premières données... L'algorithme observe.")
-        else:
-            for log in reversed(st.session_state.logs):
-                st.warning(log)
-else:
-    # --- LE TICKET DE CAISSE FINAL ---
-    st.balloons()
-    st.error("🚨 FIN DE LA COLLECTE DE DONNÉES 🚨")
-    st.subheader("🧾 Votre Ticket de Caisse Numérique :")
-    
-    for log in st.session_state.logs:
-        st.write(log)
-    
+# --- AFFICHAGE SUR SCÈNE ---
+col_tiktok, col_algo = st.columns([1, 1.2])
+
+with col_tiktok:
+    st.components.v1.html(render_tiktok_feed(), height=680)
+
+with col_algo:
+    st.markdown("## 🕵️‍♂️ L'Oeil de l'Algorithme")
+    st.markdown("*En attente des actions de l'utilisateur (Scroll / Temps de visionnage)...*")
     st.markdown("---")
-    st.markdown("""
-    **Bilan Psychologique Synthétique :**
-    * 🧠 **Niveau de manipulation possible :** 98%
-    * 💸 **Valeur marchande de vos données :** 0,42 centimes. (Oui, vous valez moins d'un euro).
-    * 🎯 **Recommandation algorithmique :** Enfermer l'utilisateur dans une boucle de vidéos de chats pour le rendre docile.
-    """)
     
-    if st.button("Recommencer l'expérience"):
-        st.session_state.index = 0
-        st.session_state.logs = []
-        st.session_state.game_over = False
-        st.session_state.start_time = time.time()
-        st.rerun()
+    # Boutons invisibles de Florian
+    if st.session_state.step < len(VIDEOS):
+        sec_col1, sec_col2 = st.columns(2)
+        with sec_col1:
+            st.button("Zapper", key=f"skip_{st.session_state.step}", on_click=trigger_algo, args=("skip",))
+            st.caption("👈 Clic secret (Zapper)")
+        with sec_col2:
+            st.button("Regarder", key=f"watch_{st.session_state.step}", on_click=trigger_algo, args=("watch",))
+            st.caption("👈 Clic secret (Regarder)")
+    else:
+        st.error("🚨 PLUS DE VIDÉOS. L'utilisateur est profilé à 100%. Prêt pour la vente des données.")
+        if st.button("🔄 Recommencer l'expérience", type="primary"):
+            st.session_state.step = 0
+            st.session_state.logs = []
+            st.rerun()
 
-# Cacher le menu Streamlit par défaut pour faire plus "pro"
-hide_streamlit_style = """
-            <style>
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            header {visibility: hidden;}
-            </style>
-            """
-
-st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+    # Affichage du journal d'analyse
+    for log in st.session_state.logs:
+        st.markdown(f"<div class='terminal-log'>{log}</div>", unsafe_allow_html=True)
