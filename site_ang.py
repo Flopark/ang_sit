@@ -151,7 +151,7 @@ def render_tiktok_feed():
             
         feed_html += f"""
         <div style="height: 100%; width: 100%; scroll-snap-align: start; position: relative;">
-            <video loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;">
+            <video loop playsinline style="width: 100%; height: 100%; object-fit: cover;">
                 <source src="data:video/mp4;base64,{b64}" type="video/mp4">
             </video>
             
@@ -259,4 +259,5 @@ with col_algo:
     # Affichage du journal d'analyse
     for log in st.session_state.logs:
         st.markdown(f"<div class='terminal-log'>{log}</div>", unsafe_allow_html=True)
+
 
