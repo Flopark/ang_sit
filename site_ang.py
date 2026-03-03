@@ -13,27 +13,33 @@ st.set_page_config(page_title="Projet TikTok - Léo & Florian", layout="wide")
 
 # --- DONNÉES DE DÉMONSTRATION (À remplacer par tes vidéos) ---
 # Format des URL Github : utilise le lien "Raw" du fichier mp4 (ex: https://raw.githubusercontent.com/...)
+# --- DONNÉES DE L'ALGORITHME (Le "Trash Talk" de Florian) ---
 VIDEOS = [
     {
-        "url": "https://www.w3schools.com/html/mov_bbb.mp4", # Vidéo de test (lapin)
-        "theme": "Vidéo d'animaux mignons",
-        "skip_msg": "Zapping en {time}s. Déduction : N'aime pas la nature. Empathie faible. 🎯 Cible pour : Publicités pour des SUV très polluants.",
-        "watch_msg": "Visionnage de {time}s. Déduction : Ennui profond, besoin de réconfort émotionnel. 🎯 Cible pour : Glaces en livraison et applications de rencontre."
+        "url": "1.mp4", 
+        "theme": "L'edit 'Sigma Male' ténébreux",
+        "skip_msg": "Zapping en {time}s. Déduction : L'utilisateur a une vie sociale épanouie et ne se prend pas pour un loup solitaire incompris. ❌ Alerte : Inutile de lui vendre des formations de 'mâle alpha'.",
+        "watch_msg": "Visionnage de {time}s. Déduction : Se prend pour le personnage principal de sa vie, mais passe ses samedis soirs en jogging dans sa chambre. 🎯 Cible : Abonnements hors de prix à des salles de sport où il n'ira jamais."
     },
     {
-        "url": "https://www.w3schools.com/html/mov_bbb.mp4", # Remplace par ta vidéo 2 (ex: Sport)
-        "theme": "Influenceur Fitness (Musculation extrême)",
-        "skip_msg": "Zapping en {time}s. Déduction : Flemme totale. 🎯 Cible pour : UberEats, promos sur les pizzas 4 fromages.",
-        "watch_msg": "Visionnage de {time}s. Déduction : Complexe d'infériorité physique détecté. 🎯 Cible pour : Poudre protéinée hors de prix et pilules miracles."
+        "url": "2.mp4", 
+        "theme": "La danse de chambre avec transition claquée",
+        "skip_msg": "Zapping en {time}s. Déduction : L'utilisateur a encore un peu d'amour-propre et une intolérance au malaise. L'algorithme est déçu.",
+        "watch_msg": "Visionnage de {time}s. Analyse oculaire : Tolérance au malaise anormalement élevée. Le cerveau est en mode veille totale. 🎯 Cible : Publicités pour des micros-cravates et des formations 'Devenir influenceur en 24h'."
     },
     {
-        "url": "https://www.w3schools.com/html/mov_bbb.mp4", # Remplace par ta vidéo 3 (ex: Argent facile)
-        "theme": "Gourou de la finance 'Deviens riche en 2 jours'",
-        "skip_msg": "Zapping en {time}s. Déduction : Esprit critique encore fonctionnel. On va devoir contourner ses défenses.",
-        "watch_msg": "Visionnage de {time}s. Déduction : Naïveté au maximum. Profil très rentable. 🎯 Cible pour : Arnaques aux cryptomonnaies et NFT de singes."
+        "url": "3.mp4", 
+        "theme": "Le Deepfake IA absurde et malaisant (Humour noir)",
+        "skip_msg": "Zapping de panique en {time}s. Déduction : Boussole morale intacte. L'utilisateur a été effrayé par cette abomination numérique. 🎯 Action : Injecter 3 vidéos de chatons mignons pour le rassurer.",
+        "watch_msg": "Visionnage prolongé de {time}s. L'algorithme est formel : Humour noir détecté, sens moral potentiellement défaillant. L'utilisateur adore l'absurde. 🎯 Cible : T-shirts ironiques, mèmes obscurs et documentaires complotistes."
+    },
+    {
+        "url": "4.mp4", 
+        "theme": "Le Doomscrolling Géopolitique (WW3 Anime Opening)",
+        "skip_msg": "Zapping d'évitement en {time}s. Déduction : Refuse de voir la réalité en face ou déteste les animes. 🎯 Cible : Filtre à bulles activé. On va lui vendre des séjours 'All-Inclusive' à Punta Cana pour le garder dans le déni.",
+        "watch_msg": "Visionnage fasciné de {time}s. Pic de cortisol (stress) détecté. L'utilisateur romance l'apocalypse et souffre d'éco-anxiété. 🎯 Cible : Rations de survie goût bœuf bourguignon et purificateurs d'eau vendus 3 fois leur prix."
     }
 ]
-
 # --- GESTION DE L'ÉTAT (Session State) ---
 if 'index' not in st.session_state:
     st.session_state.index = 0
@@ -123,4 +129,5 @@ hide_streamlit_style = """
             header {visibility: hidden;}
             </style>
             """
+
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
