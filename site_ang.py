@@ -140,12 +140,6 @@ for vid in VIDEOS:
         if os.path.exists(vid["file"]):
             with open(vid["file"], "rb") as f:
                 b64 = base64.b64encode(f.read()).decode()
-        
-        # --- GÉNÉRATION DES STATS ALÉATOIRES POUR CETTE VIDÉO ---
-        likes = format_stat(random.randint(10000, 3500000))   # Entre 10k et 3.5M
-        comments = format_stat(random.randint(100, 80000))    # Entre 100 et 80k
-        saves = format_stat(random.randint(500, 150000))      # Entre 500 et 150k
-        shares = format_stat(random.randint(50, 50000))       # Entre 50 et 50k
             
         feed_html += f"""
         <div style="height: 100%; width: 100%; scroll-snap-align: start; position: relative;">
@@ -160,12 +154,12 @@ for vid in VIDEOS:
                 
                 <div style="text-align: center; color: white; font-family: sans-serif; cursor: pointer;" onclick="toggleLike(this)">
                     <div class="heart-icon" style="font-size: 35px; transition: transform 0.2s ease, text-shadow 0.2s ease; text-shadow: 0px 0px 2px rgba(0,0,0,0.5);">🤍</div>
-                    <div class="like-count" style="font-size: 12px; font-weight: bold; margin-top: -5px;">{likes}</div>
+                    <div class="like-count" style="font-size: 12px; font-weight: bold; margin-top: -5px;">1.2M</div>
                 </div>
                 
-                <div style="text-align: center; color: white; font-family: sans-serif;"><div style="font-size: 30px; text-shadow: 0px 0px 2px rgba(0,0,0,0.5);">💬</div><div style="font-size: 12px; font-weight: bold;">{comments}</div></div>
-                <div style="text-align: center; color: white; font-family: sans-serif;"><div style="font-size: 30px; text-shadow: 0px 0px 2px rgba(0,0,0,0.5);">🔖</div><div style="font-size: 12px; font-weight: bold;">{saves}</div></div>
-                <div style="text-align: center; color: white; font-family: sans-serif;"><div style="font-size: 30px; text-shadow: 0px 0px 2px rgba(0,0,0,0.5);">↪️</div><div style="font-size: 12px; font-weight: bold;">{shares}</div></div>
+                <div style="text-align: center; color: white; font-family: sans-serif;"><div style="font-size: 30px; text-shadow: 0px 0px 2px rgba(0,0,0,0.5);">💬</div><div style="font-size: 12px; font-weight: bold;">4082</div></div>
+                <div style="text-align: center; color: white; font-family: sans-serif;"><div style="font-size: 30px; text-shadow: 0px 0px 2px rgba(0,0,0,0.5);">🔖</div><div style="font-size: 12px; font-weight: bold;">80k</div></div>
+                <div style="text-align: center; color: white; font-family: sans-serif;"><div style="font-size: 30px; text-shadow: 0px 0px 2px rgba(0,0,0,0.5);">↪️</div><div style="font-size: 12px; font-weight: bold;">Partager</div></div>
             </div>
 
             <div style="position: absolute; left: 15px; bottom: 20px; color: white; font-family: sans-serif; padding-right: 70px; z-index: 10;">
