@@ -58,11 +58,6 @@ VIDEOS = [
         "watch_msg": "Visionnage complet.\nDéduction : Tolérance au malaise anormale. Cerveau en veille.\n🎯 Cible : Formations 'Devenir influenceur en 24h'."
     },
     {
-        "file": "3.mp4", "user": "dark_humor_ai", "desc": "Bro dropped the hardest cover 💀 #ai",
-        "skip_msg": "Zapping de panique.\nDéduction : Boussole morale intacte.\n🎯 Action : Injecter 3 vidéos de chatons pour le rassurer.",
-        "watch_msg": "Visionnage prolongé.\nDéduction : Humour noir détecté, sens moral défaillant.\n🎯 Cible : T-shirts ironiques et docs complotistes."
-    },
-    {
         "file": "4.mp4", "user": "geopolitics_hub", "desc": "Season finale looks crazy 😭🌍 #ww3",
         "skip_msg": "Zapping d'évitement.\nDéduction : Refuse de voir la réalité en face.\n🎯 Cible : Séjours 'All-Inclusive' à Punta Cana.",
         "watch_msg": "Visionnage fasciné.\nDéduction : Pic de cortisol. Romance l'apocalypse.\n🎯 Cible : Rations de survie goût bœuf bourguignon."
@@ -71,6 +66,11 @@ VIDEOS = [
         "file": "5.mp4", "user": "vanity_queen", "desc": "Just feeling the vibe 💅🔥 #lipsync",
         "skip_msg": "Zapping immédiat.\nDéduction : Estime de soi normale. Insensible aux duckfaces.\n❌ Cible : Impossible de lui vendre du maquillage.",
         "watch_msg": "Visionnage complet.\nDéduction : L'utilisateur est très superficiel ou complexe sur son physique.\n🎯 Cible : Filtres payants et crèmes 'miracles'."
+    },
+    {
+        "file": "3.mp4", "user": "dark_humor_ai", "desc": "Bro dropped the hardest cover 💀 #ai",
+        "skip_msg": "Zapping de panique.\nDéduction : Boussole morale intacte.\n🎯 Action : Injecter 3 vidéos de chatons pour le rassurer.",
+        "watch_msg": "Visionnage prolongé.\nDéduction : Humour noir détecté, sens moral défaillant.\n🎯 Cible : T-shirts ironiques et docs complotistes."
     },
     {
         "file": "6.mp4", "user": "block_master_fr", "desc": "POV : Tu trouves un village Minecraft IRL 🥕 #gaming",
@@ -259,3 +259,4 @@ with col_algo:
     # Affichage du journal d'analyse
     for log in st.session_state.logs:
         st.markdown(f"<div class='terminal-log'>{log}</div>", unsafe_allow_html=True)
+
