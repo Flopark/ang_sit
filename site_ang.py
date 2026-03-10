@@ -53,7 +53,7 @@ VIDEOS = [
         "watch_msg": "Visionnage complet.\nDéduction : Se prend pour le perso principal. Reste en jogging dans sa chambre.\n🎯 Cible : Abonnements à des salles de sport."
     },
     {
-        "file": "2.mp4", "user": "leo_dance_off", "desc": "Transition de fou ! 👔🕺 #dance",
+        "file": "2.mp4", "user": "leo_dance_off", "desc": "Transition hits different ! 👔🕺 #dance",
         "skip_msg": "Zapping immédiat.\nDéduction : Amour-propre intact. Intolérance au malaise. L'algorithme est déçu.",
         "watch_msg": "Visionnage complet.\nDéduction : Tolérance au malaise anormale. Cerveau en veille.\n🎯 Cible : Formations 'Devenir influenceur en 24h'."
     },
@@ -73,7 +73,7 @@ VIDEOS = [
         "watch_msg": "Visionnage prolongé.\nDéduction : Humour noir détecté, sens moral défaillant.\n🎯 Cible : T-shirts ironiques et docs complotistes."
     },
     {
-        "file": "6.mp4", "user": "block_master_fr", "desc": "POV : Tu trouves un village Minecraft IRL 🥕 #gaming",
+        "file": "6.mp4", "user": "block_master_fr", "desc": "POV : U found an IRL Minecraft village 🥕 #gaming",
         "skip_msg": "Zapping de gêne.\nDéduction : Plus de 12 ans d'âge mental. Allergique au malaise IRL.",
         "watch_msg": "Visionnage fasciné.\nDéduction : Syndrome de Peter Pan. Vit probablement encore chez ses parents.\n🎯 Cible : Boissons énergisantes et chaises gaming."
     },
@@ -83,7 +83,7 @@ VIDEOS = [
         "watch_msg": "Visionnage en boucle.\nDéduction : Pic de dopamine morbide. Aime le Doomscrolling.\n🎯 Cible : Médias anxiogènes et pubs pour antidépresseurs."
     },
     {
-        "file": "8.mp4", "user": "tk_prime_officiel", "desc": "Quand t'en as gros sur la patate 🤬🚗 #coupdegueule",
+        "file": "8.mp4", "user": "tk_prime_officiel", "desc": "My father taking me to school at age 12  🤬🚗 #fast&furious",
         "skip_msg": "Zapping pacifiste.\nDéduction : Santé mentale équilibrée. Ne cherche pas le conflit virtuel.",
         "watch_msg": "Visionnage complet.\nDéduction : Rythme cardiaque synchronisé avec les cris. Adore le drama.\n🎯 Cible : Contenus de dashcams (accidents)."
     },
@@ -98,7 +98,7 @@ VIDEOS = [
         "watch_msg": "Visionnage de la gêne.\nDéduction : Adore se moquer du ridicule des autres en public.\n🎯 Cible : Compilations de chutes humiliantes."
     },
     {
-        "file": "11.mp4", "user": "techno_bunker_666", "desc": "Ce RRT'S dans 30 ans 🔊🕺 #hardstyle",
+        "file": "11.mp4", "user": "techno_bunker_666", "desc": "That men in 30y 🔊🕺 #hardstyle",
         "skip_msg": "Zapping de survie.\nDéduction : Tympans intacts. Préserve sa santé auditive.",
         "watch_msg": "Visionnage prolongé.\nDéduction : Cerveau grillé par les basses ou acouphènes sévères.\n🎯 Cible : Bouchons d'oreilles et billets de festival."
     }
@@ -284,6 +284,7 @@ with col_algo:
     # Affichage du journal d'analyse
     for log in st.session_state.logs:
         st.markdown(f"<div class='terminal-log'>{log}</div>", unsafe_allow_html=True)
+
 
 
 
